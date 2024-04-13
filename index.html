@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-Calendar Plugin Development</title>
+</head>
+<body>
+    <div id="app">
+        <!-- Your test component or usage example goes here -->
+        <!-- <v-calendar /> -->
+    </div>
+
+    <!-- Import Vue 3 -->
+    <script type="module">
+      import { createApp } from 'vue';
+      import App from './src/App.vue'; // Assuming you have an App.vue for testing
+      import VCalendar from './src/index.ts'; // Importing VCalendar from index.ts
+      import VDatePicker from './src/index.ts'; // Importing VCalendar from index.ts
+
+      const app = createApp(App);
+      app.use(VCalendar)
+
+      app.mount('#app');
+    </script>
+</body>
+</html>
