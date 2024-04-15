@@ -12141,7 +12141,6 @@ const _sfc_main$4 = {
   mixins: [childMixin, slotMixin],
   inheritAttrs: false,
   render() {
-    console.log(this.page);
     const header = this.safeSlot("header", this.page) || h("div", { class: `vc-header align-${this.titlePosition}` }, [
       h(
         "div",
@@ -12980,7 +12979,6 @@ const _sfc_main$3 = {
       return page;
     },
     buildPage({ month, year }, ignoreCache) {
-      console.log("hello page", month, year);
       let yearLabel = "";
       let shortYearLabel = "";
       let title2 = "";
@@ -13002,7 +13000,6 @@ const _sfc_main$3 = {
         monthLabel = this.$locale.format(date, "MMMM");
       }
       const key = `${year.toString()}-${month.toString()}`;
-      console.log("key", key);
       let page = this.pages.find((p) => p.key === key);
       if (!page || ignoreCache) {
         const monthComps = this.$locale.getMonthComps(month, year);
@@ -13028,7 +13025,6 @@ const _sfc_main$3 = {
           moveNextMonth: () => this.move(nextMonthComps),
           refresh: true
         };
-        console.log(this.$locale.getCalendarDays(page));
         page.days = this.$locale.getCalendarDays(page);
       }
       return page;
@@ -13799,9 +13795,7 @@ const _sfc_main = {
           };
           month_1 = month_dic[month_1];
           date_1 = year_1 + "-" + month_1 + "-" + day_1;
-          console.log(date_1);
           let date_2 = new momentJalaali(date_1, "jYYYY-jMM-jDD").format("YYYY-MM-DD");
-          console.log(date_2);
           day.date = date_2;
           day.shamsi = date_1;
           day.real_date = date_2;
