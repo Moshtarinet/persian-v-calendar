@@ -140,6 +140,7 @@ export default {
   },
   computed: {
     label() {
+      // console.log(this.day.label)
       return this.day.label;
     },
     startTime() {

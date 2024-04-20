@@ -471,8 +471,13 @@ export default {
           let date_1 = new Date(date_to_edit).toLocaleDateString()
           /// get day / month / year
           let day_data = date_1.split("/")
-          let day_1 = day_data[1]
+          let day_1 = day.day
+          let day_from_end = day.dayFromEnd
           let month_1 = day_data[0]
+          if (day_1 == 31 && day_from_end == 1) {
+            month_1 = month_1 - 1
+          }
+
           let year_1 = day_data[2]
           // console.log(day_1)
           year_1 = year_1 - 621
@@ -494,14 +499,13 @@ export default {
           month_1 = month_dic[month_1]
           //complete date
           date_1 = year_1 + "-" + month_1 + "-" + day_1
-          console.log(date_1);
           //convert shamsi date to gerogian date
           let date_2 = new moment(date_1, 'jYYYY-jMM-jDD').format('YYYY-MM-DD');
-          console.log(date_2)
           // console.log(day)
           day.date = date_2
           day.shamsi = date_1
           day.real_date = date_2
+          // console.log(date_1)
         }
 
         this.updateValue(day.date, opts, day.shamsi)

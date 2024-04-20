@@ -655,7 +655,7 @@ export default {
     },
 
     buildPage({ month, year }, ignoreCache) {
-      console.log("hello page",month,year)
+      // console.log("hello page",month,year)
       let yearLabel = '';
       let shortYearLabel = '';
       let title = '';
@@ -681,7 +681,7 @@ export default {
         monthLabel = this.$locale.format(date, 'MMMM')
       }
       const key = `${year.toString()}-${month.toString()}`;
-      console.log("key",key)
+      // console.log("key",key)
       let page = this.pages.find(p => p.key === key);
       if (!page || ignoreCache) {
         const monthComps = this.$locale.getMonthComps(month, year);
@@ -708,7 +708,7 @@ export default {
           moveNextMonth: () => this.move(nextMonthComps),
           refresh: true,
         };
-        console.log(this.$locale.getCalendarDays(page))
+        // console.log(this.$locale.getCalendarDays(page))
         page.days = this.$locale.getCalendarDays(page);
       }
 

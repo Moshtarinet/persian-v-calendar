@@ -14,7 +14,7 @@ export default {
     const date = ref(new Date());
 
     watch(date, (newVal, oldVal) => {
-      console.log('date changed', newVal, oldVal);
+      // conso/le.log('date changed', newVal, oldVal);
     });
 
     // Return the date so it can be used in the template

@@ -12,7 +12,7 @@ export default {
   mixins: [childMixin, slotMixin],
   inheritAttrs: false,
   render() {
-    console.log(this.page);
+    // console.log(this.page);
     // Header
     const header =
       this.safeSlot('header', this.page) ||
