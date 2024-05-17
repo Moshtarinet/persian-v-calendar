@@ -662,7 +662,7 @@ export default {
 
       // Assign value
       if (valueChanged) {
-        // this[valueKey] = normalizedValue;
+        this[valueKey] = normalizedValue;
 
         if (!isDragging) this.dragValue = null;
         // Denormalization

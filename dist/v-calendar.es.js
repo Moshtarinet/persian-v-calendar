@@ -13889,6 +13889,7 @@ const _sfc_main = {
         valueChanged = true;
       }
       if (valueChanged) {
+        this[valueKey] = normalizedValue;
         if (!isDragging)
           this.dragValue = null;
         const denormalizedValue = this.denormalizeValue(normalizedValue);
