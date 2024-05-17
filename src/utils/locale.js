@@ -856,7 +856,7 @@ export default class Locale {
     let todayMonth = null;
     let todayYear = null;
     if (localeId === "fa") {
-      moment.loadPersian({ usePersianDigits: true });
+      moment.loadPersian({ usePersianDigits: false });
       today = moment();
       todayDay = today.jDate();
       todayMonth = today.jMonth(); // In moment-jalaali, months are 0-indexed

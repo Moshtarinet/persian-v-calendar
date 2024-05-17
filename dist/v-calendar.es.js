@@ -10767,7 +10767,7 @@ class Locale {
     let year = prevMonthComps.year;
     let today = null;
     if (localeId === "fa") {
-      momentJalaali.loadPersian({ usePersianDigits: true });
+      momentJalaali.loadPersian({ usePersianDigits: false });
       today = momentJalaali();
       today.jDate();
       today.jMonth();
@@ -11120,6 +11120,8 @@ const rootMixin$1 = {
       });
     },
     disabledDates_() {
+      const dates = this.normalizeDates(this.disabledDates);
+      return dates;
     },
     availableDates_() {
       return this.normalizeDates(this.availableDates);
@@ -13841,6 +13843,7 @@ const _sfc_main = {
             resolve(this.value_);
           }, debounce);
         } else {
+          console.log(shamsi_date);
           this.forceUpdateValue(value, args, shamsi_date);
           resolve(this.value_);
         }

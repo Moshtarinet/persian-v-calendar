@@ -54,7 +54,7 @@ export const rootMixin = {
       });
     },
     disabledDates_() {
-      // const dates = this.normalizeDates(this.disabledDates);
+      const dates = this.normalizeDates(this.disabledDates);
       // const { minDate, minDateExact, maxDate, maxDateExact } = this;
       // // Add disabled range for min date
       // if (minDateExact || minDate) {
@@ -76,7 +76,7 @@ export const rootMixin = {
       //     end: null,
       //   });
       // }
-      // return dates;
+      return dates;
     },
     availableDates_() {
       return this.normalizeDates(this.availableDates);

@@ -507,7 +507,6 @@ export default {
           day.real_date = date_2
           // console.log(date_1)
         }
-
         this.updateValue(day.date, opts, day.shamsi)
       }
 
@@ -595,6 +594,7 @@ export default {
             resolve(this.value_);
           }, debounce);
         } else {
+          console.log(shamsi_date)
           this.forceUpdateValue(value, args, shamsi_date);
           resolve(this.value_);
         }
@@ -662,7 +662,7 @@ export default {
 
       // Assign value
       if (valueChanged) {
-        this[valueKey] = normalizedValue;
+         this[valueKey] = normalizedValue;
 
         if (!isDragging) this.dragValue = null;
         // Denormalization
