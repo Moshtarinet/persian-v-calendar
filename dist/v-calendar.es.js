@@ -10668,7 +10668,7 @@ class Locale {
   }
   getWeekdayDates(firstDayOfWeek = this.firstDayOfWeek) {
     const dates = [];
-    const year = 2020;
+    const year = 2023;
     const month = 1;
     const day = 5 + firstDayOfWeek - 1;
     for (let i = 0; i < daysInWeek; i++) {
@@ -10692,27 +10692,30 @@ class Locale {
   }
   getMonthComps(month, year) {
     let comps;
-    if (localeId === "fa") {
-      const m = momentJalaali(`${year}-${month}-01`, "YYYY-MM-DD").locale("fa");
-      const firstDayOfMonth = m.clone().startOf("jMonth");
-      const days = firstDayOfMonth.daysInMonth();
+    const key = `${month}-${year}`;
+    comps = this.monthData[key];
+    if (!comps) {
+      const firstDayOfMonth = startOfMonth(new Date(year, month - 1, 1));
+      const firstWeekday = (getDay(firstDayOfMonth) + 1) % 7 || 7;
+      const days = getDaysInMonth(firstDayOfMonth);
+      const weekStartsOn = this.firstDayOfWeek - 1;
       let weeks = 0;
-      let date = firstDayOfMonth.clone();
-      while (date.jMonth() + 1 === month) {
+      let date = firstDayOfMonth;
+      while (date.getMonth() + 1 === month) {
         weeks++;
-        date.add(7, "days");
+        date = addDays$1(date, 7);
       }
       const weeknumbers = [];
       const isoWeeknumbers = [];
       for (let i = 0; i < weeks; i++) {
-        const date2 = firstDayOfMonth.clone().add(i * 7, "days");
-        weeknumbers.push(date2.week());
-        isoWeeknumbers.push(date2.isoWeek());
+        const date2 = addDays$1(firstDayOfMonth, i * 7);
+        weeknumbers.push(getWeek(new Date(date2), { weekStartsOn }));
+        isoWeeknumbers.push(getISOWeek(new Date(date2)));
       }
       comps = {
         firstDayOfWeek: this.firstDayOfWeek,
         inLeapYear: days === 30,
-        firstWeekday: firstDayOfMonth.day() + 1,
+        firstWeekday,
         days,
         weeks,
         month,
@@ -10720,40 +10723,7 @@ class Locale {
         weeknumbers,
         isoWeeknumbers
       };
-    } else {
-      const key = `${month}-${year}`;
-      comps = this.monthData[key];
-      if (!comps) {
-        const firstDayOfMonth = startOfMonth(new Date(year, month - 1, 1));
-        const firstWeekday = (getDay(firstDayOfMonth) + 1) % 7 || 7;
-        const days = getDaysInMonth(firstDayOfMonth);
-        const weekStartsOn = this.firstDayOfWeek - 1;
-        let weeks = 0;
-        let date = firstDayOfMonth;
-        while (date.getMonth() + 1 === month) {
-          weeks++;
-          date = addDays$1(date, 7);
-        }
-        const weeknumbers = [];
-        const isoWeeknumbers = [];
-        for (let i = 0; i < weeks; i++) {
-          const date2 = addDays$1(firstDayOfMonth, i * 7);
-          weeknumbers.push(getWeek(new Date(date2), { weekStartsOn }));
-          isoWeeknumbers.push(getISOWeek(new Date(date2)));
-        }
-        comps = {
-          firstDayOfWeek: this.firstDayOfWeek,
-          inLeapYear: days === 30,
-          firstWeekday,
-          days,
-          weeks,
-          month,
-          year,
-          weeknumbers,
-          isoWeeknumbers
-        };
-        this.monthData[key] = comps;
-      }
+      this.monthData[key] = comps;
     }
     return comps;
   }
@@ -10796,20 +10766,17 @@ class Locale {
     let month = prevMonthComps.month;
     let year = prevMonthComps.year;
     let today = null;
-    let todayDay = null;
-    let todayMonth = null;
-    let todayYear = null;
     if (localeId === "fa") {
-      momentJalaali.loadPersian({ usePersianDigits: false });
+      momentJalaali.loadPersian({ usePersianDigits: true });
       today = momentJalaali();
-      todayDay = today.jDate();
-      todayMonth = today.jMonth() + 1;
-      todayYear = today.jYear();
+      today.jDate();
+      today.jMonth();
+      today.jYear();
     } else {
       today = new Date();
-      todayDay = today.getDate();
-      todayMonth = today.getMonth() + 1;
-      todayYear = today.getFullYear();
+      today.getDate();
+      today.getMonth() + 1;
+      today.getFullYear();
     }
     const dft = (y, m, d) => (hours, minutes, seconds, milliseconds) => this.normalizeDate({
       year: y,
@@ -10847,7 +10814,7 @@ class Locale {
         const weekdayPositionFromEnd = 7 - i;
         const weeknumber = weeknumbers[w - 1];
         const isoWeeknumber = isoWeeknumbers[w - 1];
-        const isToday = day === todayDay && month === todayMonth && year === todayYear;
+        const isToday = false;
         const isFirstDay = thisMonth && day === 1;
         const isLastDay = thisMonth && day === monthComps.days;
         const onTop = w === 1;
@@ -11153,23 +11120,6 @@ const rootMixin$1 = {
       });
     },
     disabledDates_() {
-      const dates = this.normalizeDates(this.disabledDates);
-      const { minDate, minDateExact, maxDate, maxDateExact } = this;
-      if (minDateExact || minDate) {
-        const end = minDateExact ? this.normalizeDate(minDateExact) : this.normalizeDate(minDate, { time: "00:00:00" });
-        dates.push({
-          start: null,
-          end: new Date(end.getTime() - 1e3)
-        });
-      }
-      if (maxDateExact || maxDate) {
-        const start = maxDateExact ? this.normalizeDate(maxDateExact) : this.normalizeDate(maxDate, { time: "23:59:59" });
-        dates.push({
-          start: new Date(start.getTime() + 1e3),
-          end: null
-        });
-      }
-      return dates;
     },
     availableDates_() {
       return this.normalizeDates(this.availableDates);
@@ -12646,6 +12596,7 @@ const _sfc_main$3 = {
   },
   data() {
     return {
+      currentDate: new Date(),
       pages: [],
       store: null,
       lastFocusedDay: null,
@@ -13775,8 +13726,12 @@ const _sfc_main = {
           let date_to_edit = day.date;
           let date_1 = new Date(date_to_edit).toLocaleDateString();
           let day_data = date_1.split("/");
-          let day_1 = day_data[1];
+          let day_1 = day.day;
+          let day_from_end = day.dayFromEnd;
           let month_1 = day_data[0];
+          if (day_1 == 31 && day_from_end == 1) {
+            month_1 = month_1 - 1;
+          }
           let year_1 = day_data[2];
           year_1 = year_1 - 621;
           let month_dic = {
@@ -13934,7 +13889,6 @@ const _sfc_main = {
         valueChanged = true;
       }
       if (valueChanged) {
-        this[valueKey] = normalizedValue;
         if (!isDragging)
           this.dragValue = null;
         const denormalizedValue = this.denormalizeValue(normalizedValue);
