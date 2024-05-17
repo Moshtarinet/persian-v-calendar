@@ -595,7 +595,6 @@ export default {
             resolve(this.value_);
           }, debounce);
         } else {
-          // console.log(shamsi_date)
           this.forceUpdateValue(value, args, shamsi_date);
           resolve(this.value_);
         }
@@ -663,13 +662,8 @@ export default {
 
       // Assign value
       if (valueChanged) {
-        // if(shamsi_date){
-        //   this[valueKey] = new moment(shamsi_date, 'jYYYY-jMM-jDD').format('YYYY-MM-DD');
-        //   // this.$emit('update:modelValue', normalizedValue,shamsi_date);
-        // }else{
-        this[valueKey] = normalizedValue;
-        // }
-        // Clear drag value if needed
+        // this[valueKey] = normalizedValue;
+
         if (!isDragging) this.dragValue = null;
         // Denormalization
         const denormalizedValue = this.denormalizeValue(normalizedValue);

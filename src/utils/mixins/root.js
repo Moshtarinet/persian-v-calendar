@@ -54,29 +54,29 @@ export const rootMixin = {
       });
     },
     disabledDates_() {
-      const dates = this.normalizeDates(this.disabledDates);
-      const { minDate, minDateExact, maxDate, maxDateExact } = this;
-      // Add disabled range for min date
-      if (minDateExact || minDate) {
-        const end = minDateExact
-          ? this.normalizeDate(minDateExact)
-          : this.normalizeDate(minDate, { time: '00:00:00' });
-        dates.push({
-          start: null,
-          end: new Date(end.getTime() - 1000),
-        });
-      }
-      // Add disabled range for min date
-      if (maxDateExact || maxDate) {
-        const start = maxDateExact
-          ? this.normalizeDate(maxDateExact)
-          : this.normalizeDate(maxDate, { time: '23:59:59' });
-        dates.push({
-          start: new Date(start.getTime() + 1000),
-          end: null,
-        });
-      }
-      return dates;
+      // const dates = this.normalizeDates(this.disabledDates);
+      // const { minDate, minDateExact, maxDate, maxDateExact } = this;
+      // // Add disabled range for min date
+      // if (minDateExact || minDate) {
+      //   const end = minDateExact
+      //     ? this.normalizeDate(minDateExact)
+      //     : this.normalizeDate(minDate, { time: '00:00:00' });
+      //   dates.push({
+      //     start: null,
+      //     end: new Date(end.getTime() - 1000),
+      //   });
+      // }
+      // // Add disabled range for min date
+      // if (maxDateExact || maxDate) {
+      //   const start = maxDateExact
+      //     ? this.normalizeDate(maxDateExact)
+      //     : this.normalizeDate(maxDate, { time: '23:59:59' });
+      //   dates.push({
+      //     start: new Date(start.getTime() + 1000),
+      //     end: null,
+      //   });
+      // }
+      // return dates;
     },
     availableDates_() {
       return this.normalizeDates(this.availableDates);

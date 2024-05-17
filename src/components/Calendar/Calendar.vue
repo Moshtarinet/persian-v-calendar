@@ -35,6 +35,7 @@ import {
   head,
   last,
 } from '../../utils/_';
+import { th } from 'date-fns/locale';
 
 export default {
   name: 'Calendar',
@@ -294,6 +295,7 @@ export default {
   },
   data() {
     return {
+      currentDate: new Date(),
       pages: [],
       store: null,
       lastFocusedDay: null,
@@ -413,6 +415,7 @@ export default {
         getDefault('touch'),
       );
     }
+    // this.goToDate(this
   },
   beforeUnmount() {
     this.pages = [];
@@ -684,9 +687,16 @@ export default {
       // console.log("key",key)
       let page = this.pages.find(p => p.key === key);
       if (!page || ignoreCache) {
-        const monthComps = this.$locale.getMonthComps(month, year);
-        const prevMonthComps = this.$locale.getPrevMonthComps(month, year);
-        const nextMonthComps = this.$locale.getNextMonthComps(month, year);
+        // if(this.$locale.id == 'fa' && year > 1900){
+        //   const monthComps = this.$locale.getFaMonthComps(month, year);
+        //   const prevMonthComps = this.$locale.getFaPrevMonthComps(month, year);
+        //   const nextMonthComps = this.$locale.getFaNextMonthComps(month, year);
+        // }else{
+          const monthComps = this.$locale.getMonthComps(month, year);
+          const prevMonthComps = this.$locale.getPrevMonthComps(month, year);
+          const nextMonthComps = this.$locale.getNextMonthComps(month, year);
+        // }
+
 
         page = {
           key,

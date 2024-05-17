@@ -63,7 +63,7 @@ const monthUpdate = arrName => (d, v, l) => {
 const maskMacros = ['L', 'iso'];
 
 const daysInWeek = 7;
-const daysInMonths = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 30];
+// const daysInMonths = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 30];
 const hourOptions = [
   { value: 0, label: '00' },
   { value: 1, label: '01' },
@@ -734,7 +734,7 @@ export default class Locale {
 
   getWeekdayDates(firstDayOfWeek = this.firstDayOfWeek) {
     const dates = [];
-    const year = 2020;
+    const year = 2023;
     const month = 1;
     const day = 5 + firstDayOfWeek - 1;
     for (let i = 0; i < daysInWeek; i++) {
@@ -760,84 +760,49 @@ export default class Locale {
 
 
 
-getMonthComps(month, year) {
-  // console.log(month, year);
-  let comps;
+  getMonthComps(month, year) {
+    let comps;
 
-  if (localeId === "fa") {
-      //year and month are not in jalali so i have to convert to jalali
-      const m = moment(`${year}-${month}-01`, 'YYYY-MM-DD').locale('fa');
-      const firstDayOfMonth = m.clone().startOf('jMonth');
-      const days = firstDayOfMonth.daysInMonth();
+    const key = `${month}-${year}`;
+    comps = this.monthData[key];
+
+    if (!comps) {
+      const firstDayOfMonth = startOfMonth(new Date(year, month - 1, 1));
+      const firstWeekday = (getDay(firstDayOfMonth) + 1) % 7 || 7;
+      const days = getDaysInMonth(firstDayOfMonth);
+      const weekStartsOn = this.firstDayOfWeek - 1;
+
       let weeks = 0;
-      let date = firstDayOfMonth.clone();
-
-      while (date.jMonth() + 1 === month) {
-          weeks++;
-          date.add(7, 'days');
+      let date = firstDayOfMonth;
+      while (date.getMonth() + 1 === month) {
+        weeks++;
+        date = addDays(date, 7);
       }
 
       const weeknumbers = [];
-      const isoWeeknumbers = []; // ISO week numbers may not be relevant in Jalali, but calculated for consistency
+      const isoWeeknumbers = [];
       for (let i = 0; i < weeks; i++) {
-          const date = firstDayOfMonth.clone().add(i * 7, 'days');
-          weeknumbers.push(date.week()); // or use a Jalali-specific method if needed
-          isoWeeknumbers.push(date.isoWeek()); // or use a Jalali-specific method if needed
+        const date = addDays(firstDayOfMonth, i * 7);
+        weeknumbers.push(getWeek(new Date(date), { weekStartsOn }));
+        isoWeeknumbers.push(getISOWeek(new Date(date)));
       }
-
       comps = {
-          firstDayOfWeek: this.firstDayOfWeek,
-          inLeapYear: days === 30, // Simple leap year check for Jalali calendar
-          firstWeekday: firstDayOfMonth.day() + 1,
-          days,
-          weeks,
-          month,
-          year,
-          weeknumbers,
-          isoWeeknumbers,
+        firstDayOfWeek: this.firstDayOfWeek,
+        inLeapYear: days === 30,
+        firstWeekday,
+        days,
+        weeks,
+        month,
+        year,
+        weeknumbers,
+        isoWeeknumbers,
       };
-  } else {
-      const key = `${month}-${year}`;
-      comps = this.monthData[key];
+      this.monthData[key] = comps;
+    }
 
-      if (!comps) {
-          const firstDayOfMonth = startOfMonth(new Date(year, month - 1, 1));
-          const firstWeekday = (getDay(firstDayOfMonth) + 1) % 7 || 7;
-          const days = getDaysInMonth(firstDayOfMonth);
-          const weekStartsOn = this.firstDayOfWeek - 1;
 
-          let weeks = 0;
-          let date = firstDayOfMonth;
-          while (date.getMonth() + 1 === month) {
-              weeks++;
-              date = addDays(date, 7);
-          }
-
-          const weeknumbers = [];
-          const isoWeeknumbers = [];
-          for (let i = 0; i < weeks; i++) {
-              const date = addDays(firstDayOfMonth, i * 7);
-              weeknumbers.push(getWeek(new Date(date), { weekStartsOn }));
-              isoWeeknumbers.push(getISOWeek(new Date(date)));
-          }
-
-          comps = {
-              firstDayOfWeek: this.firstDayOfWeek,
-              inLeapYear: days === 30,
-              firstWeekday,
-              days,
-              weeks,
-              month,
-              year,
-              weeknumbers,
-              isoWeeknumbers,
-          };
-          this.monthData[key] = comps;
-      }
+    return comps;
   }
-
-  return comps;
-}
   // Days/month/year components for today's month
   getThisMonthComps() {
     const { month, year } = this.getDateParts(new Date());
@@ -891,10 +856,10 @@ getMonthComps(month, year) {
     let todayMonth = null;
     let todayYear = null;
     if (localeId === "fa") {
-      moment.loadPersian({ usePersianDigits: false });
+      moment.loadPersian({ usePersianDigits: true });
       today = moment();
       todayDay = today.jDate();
-      todayMonth = today.jMonth() + 1; // In moment-jalaali, months are 0-indexed
+      todayMonth = today.jMonth(); // In moment-jalaali, months are 0-indexed
       todayYear = today.jYear();
     } else {
       today = new Date();
@@ -918,7 +883,6 @@ getMonthComps(month, year) {
         i <= 7;
         i++, weekday += weekday === 7 ? 1 - 7 : 1
       ) {
-        // console.log(monthComps.days)
         if (prevMonth && weekday === firstWeekday) {
           day = 1;
           dayFromEnd = monthComps.days;
@@ -944,8 +908,7 @@ getMonthComps(month, year) {
         const weekdayPositionFromEnd = 7 - i;
         const weeknumber = weeknumbers[w - 1];
         const isoWeeknumber = isoWeeknumbers[w - 1];
-        const isToday =
-          day === todayDay && month === todayMonth && year === todayYear;
+        const isToday = false;
         const isFirstDay = thisMonth && day === 1;
         const isLastDay = thisMonth && day === monthComps.days;
         const onTop = w === 1;
