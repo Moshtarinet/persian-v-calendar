@@ -13467,6 +13467,7 @@ const _sfc_main = {
       inputValues: ["", ""],
       updateTimeout: null,
       watchValue: true,
+      oneTimeUpdated: false,
       datePickerPopoverId: createGuid()
     };
   },
@@ -13843,7 +13844,6 @@ const _sfc_main = {
             resolve(this.value_);
           }, debounce);
         } else {
-          console.log(shamsi_date);
           this.forceUpdateValue(value, args, shamsi_date);
           resolve(this.value_);
         }
@@ -13898,6 +13898,7 @@ const _sfc_main = {
         const denormalizedValue = this.denormalizeValue(normalizedValue);
         const event = this.isDragging ? "drag" : "update:modelValue";
         this.watchValue = false;
+        this.oneTimeUpdated = true;
         this.$emit(event, denormalizedValue);
         this.$nextTick(() => this.watchValue = true);
       }
@@ -14046,6 +14047,7 @@ const _sfc_main = {
     },
     getPageForValue(isStart) {
       if (this.hasValue(this.value_)) {
+        // console.log(this.value_, isStart);
         return this.pageForDate(
           this.isRange ? this.value_[isStart ? "start" : "end"] : this.value_
         );

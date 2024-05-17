@@ -196,6 +196,7 @@ export default {
       inputValues: ['', ''],
       updateTimeout: null,
       watchValue: true,
+      oneTimeUpdated: false,
       datePickerPopoverId: createGuid(),
     };
   },
@@ -355,18 +356,18 @@ export default {
     },
   },
   created() {
-    this.value_ = this.normalizeValue(
-      this.modelValue,
-      this.modelConfig_,
-      PATCH.DATE_TIME,
-      RANGE_PRIORITY.BOTH,
-    );
-    this.forceUpdateValue(this.modelValue, {
-      config: this.modelConfig_,
-      formatInput: true,
-      hidePopover: false,
-    });
-    this.refreshDateParts();
+    // this.value_ = this.normalizeValue(
+    //   this.modelValue,
+    //   this.modelConfig_,
+    //   PATCH.DATE_TIME,
+    //   RANGE_PRIORITY.BOTH,
+    // );
+    // this.forceUpdateValue(this.modelValue, {
+    //   config: this.modelConfig_,
+    //   formatInput: true,
+    //   hidePopover: false,
+    // });
+    // this.refreshDateParts();
   },
   mounted() {
     // Handle escape key presses
@@ -501,13 +502,14 @@ export default {
           date_1 = year_1 + "-" + month_1 + "-" + day_1
           //convert shamsi date to gerogian date
           let date_2 = new moment(date_1, 'jYYYY-jMM-jDD').format('YYYY-MM-DD');
-          // console.log(day)
-          day.date = date_2
+
+          // day.date = date_2
           day.shamsi = date_1
           day.real_date = date_2
           // console.log(date_1)
         }
-        this.updateValue(day.date, opts, day.shamsi)
+        // console.log(day.date)
+        this.updateValue(day.date, opts, day.real_date)
       }
 
     },
@@ -584,19 +586,29 @@ export default {
         hidePopover: true,
       });
     },
-    updateValue(value, opts = {}, shamsi_date) {
+    updateValue(value, opts = {}, shamsi_date = null) {
       clearTimeout(this.updateTimeout);
       return new Promise(resolve => {
         const { debounce, ...args } = opts;
         if (debounce > 0) {
           this.updateTimeout = setTimeout(() => {
-            this.forceUpdateValue(value, args, shamsi_date);
-            resolve(this.value_);
+            if (shamsi_date) {
+              this.forceUpdateValue(shamsi_date, args);
+              resolve(this.value_);
+            } else {
+              this.forceUpdateValue(value, args);
+              resolve(this.value_);
+            }
           }, debounce);
         } else {
-          console.log(shamsi_date)
-          this.forceUpdateValue(value, args, shamsi_date);
-          resolve(this.value_);
+          if (shamsi_date) {
+            // console.log(shamsi_date)
+            this.forceUpdateValue(shamsi_date, args);
+            resolve(this.value_);
+          } else {
+            this.forceUpdateValue(value, args);
+            resolve(this.value_);
+          }
         }
       });
     },
@@ -662,7 +674,7 @@ export default {
 
       // Assign value
       if (valueChanged) {
-         this[valueKey] = normalizedValue;
+        this[valueKey] = normalizedValue;
 
         if (!isDragging) this.dragValue = null;
         // Denormalization
@@ -670,6 +682,7 @@ export default {
         // Notification
         const event = this.isDragging ? 'drag' : 'update:modelValue';
         this.watchValue = false;
+        this.oneTimeUpdated = true;
         this.$emit(event, denormalizedValue);
         this.$nextTick(() => (this.watchValue = true));
       }
