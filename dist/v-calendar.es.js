@@ -13627,18 +13627,6 @@ const _sfc_main = {
     }
   },
   created() {
-    this.value_ = this.normalizeValue(
-      this.modelValue,
-      this.modelConfig_,
-      PATCH.DATE_TIME,
-      RANGE_PRIORITY.BOTH
-    );
-    this.forceUpdateValue(this.modelValue, {
-      config: this.modelConfig_,
-      formatInput: true,
-      hidePopover: false
-    });
-    this.refreshDateParts();
   },
   mounted() {
     on(document, "keydown", this.onDocumentKeyDown);
@@ -13754,11 +13742,10 @@ const _sfc_main = {
           month_1 = month_dic[month_1];
           date_1 = year_1 + "-" + month_1 + "-" + day_1;
           let date_2 = new momentJalaali(date_1, "jYYYY-jMM-jDD").format("YYYY-MM-DD");
-          day.date = date_2;
           day.shamsi = date_1;
           day.real_date = date_2;
         }
-        this.updateValue(day.date, opts, day.shamsi);
+        this.updateValue(day.date, opts, day.real_date);
       }
     },
     onDayMouseEnter(day) {
@@ -13834,18 +13821,28 @@ const _sfc_main = {
         hidePopover: true
       });
     },
-    updateValue(value, opts = {}, shamsi_date) {
+    updateValue(value, opts = {}, shamsi_date = null) {
       clearTimeout(this.updateTimeout);
       return new Promise((resolve) => {
         const { debounce, ...args } = opts;
         if (debounce > 0) {
           this.updateTimeout = setTimeout(() => {
-            this.forceUpdateValue(value, args, shamsi_date);
-            resolve(this.value_);
+            if (shamsi_date) {
+              this.forceUpdateValue(shamsi_date, args);
+              resolve(this.value_);
+            } else {
+              this.forceUpdateValue(value, args);
+              resolve(this.value_);
+            }
           }, debounce);
         } else {
-          this.forceUpdateValue(value, args, shamsi_date);
-          resolve(this.value_);
+          if (shamsi_date) {
+            this.forceUpdateValue(shamsi_date, args);
+            resolve(this.value_);
+          } else {
+            this.forceUpdateValue(value, args);
+            resolve(this.value_);
+          }
         }
       });
     },
@@ -14047,7 +14044,6 @@ const _sfc_main = {
     },
     getPageForValue(isStart) {
       if (this.hasValue(this.value_)) {
-        // console.log(this.value_, isStart);
         return this.pageForDate(
           this.isRange ? this.value_[isStart ? "start" : "end"] : this.value_
         );
