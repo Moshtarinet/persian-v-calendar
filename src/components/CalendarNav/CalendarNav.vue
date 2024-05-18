@@ -4,38 +4,20 @@
     <!--Nav header-->
     <div class="vc-nav-header">
       <!--Move prev button-->
-      <span
-        role="button"
-        class="vc-nav-arrow is-left"
-        :class="{ 'is-disabled': !prevItemsEnabled }"
-        :tabindex="prevItemsEnabled ? 0 : undefined"
-        @click="movePrev"
-        @keydown="e => onSpaceOrEnter(e, movePrev)"
-      >
+      <span role="button" class="vc-nav-arrow is-left" :class="{ 'is-disabled': !prevItemsEnabled }"
+        :tabindex="prevItemsEnabled ? 0 : undefined" @click="movePrev" @keydown="e => onSpaceOrEnter(e, movePrev)">
         <slot name="nav-left-button">
           <svg-icon name="left-arrow" width="20px" height="24px" />
         </slot>
       </span>
       <!--Mode switch button-->
-      <span
-        role="button"
-        class="vc-nav-title vc-grid-focus"
-        :style="{ whiteSpace: 'nowrap' }"
-        tabindex="0"
-        @click="toggleMode"
-        @keydown="e => onSpaceOrEnter(e, toggleMode)"
-      >
+      <span role="button" class="vc-nav-title vc-grid-focus" :style="{ whiteSpace: 'nowrap' }" tabindex="0"
+        @click="toggleMode" @keydown="e => onSpaceOrEnter(e, toggleMode)">
         {{ title }}
       </span>
       <!--Move next button-->
-      <span
-        role="button"
-        class="vc-nav-arrow is-right"
-        :class="{ 'is-disabled': !nextItemsEnabled }"
-        :tabindex="nextItemsEnabled ? 0 : undefined"
-        @click="moveNext"
-        @keydown="e => onSpaceOrEnter(e, moveNext)"
-      >
+      <span role="button" class="vc-nav-arrow is-right" :class="{ 'is-disabled': !nextItemsEnabled }"
+        :tabindex="nextItemsEnabled ? 0 : undefined" @click="moveNext" @keydown="e => onSpaceOrEnter(e, moveNext)">
         <slot name="nav-right-button">
           <svg-icon name="right-arrow" width="20px" height="24px" />
         </slot>
@@ -43,17 +25,9 @@
     </div>
     <!--Navigation items-->
     <div class="vc-nav-items">
-      <span
-        v-for="item in activeItems"
-        :key="item.label"
-        role="button"
-        :data-id="item.id"
-        :aria-label="item.ariaLabel"
-        :class="getItemClasses(item)"
-        :tabindex="item.isDisabled ? undefined : 0"
-        @click="item.click"
-        @keydown="e => onSpaceOrEnter(e, item.click)"
-      >
+      <span v-for="item in activeItems" :key="item.label" role="button" :data-id="item.id" :aria-label="item.ariaLabel"
+        :class="getItemClasses(item)" :tabindex="item.isDisabled ? undefined : 0" @click="item.click"
+        @keydown="e => onSpaceOrEnter(e, item.click)">
         {{ item.label }}
       </span>
     </div>
@@ -66,6 +40,7 @@ import { childMixin } from '../../utils/mixins';
 import { get, head, last } from '../../utils/_';
 import { onSpaceOrEnter, pad } from '../../utils/helpers';
 import { getYear, getMonth, format } from 'date-fns-jalali';
+
 
 const _yearGroupCount = 12;
 
@@ -97,7 +72,7 @@ export default {
     },
     title() {
       let _jalali = 0
-      if (this.locale.id=="fa"){
+      if (this.locale.id == "fa") {
         _jalali = 621
       }
       return this.monthMode
@@ -190,15 +165,16 @@ export default {
     getYearGroupIndex(year) {
       return Math.floor(year / _yearGroupCount);
     },
+
     getMonthItems(year) {
       const today = new Date();
       const thisMonth = getMonth(today) + 1; // getMonth returns 0-11
       const thisYear = getYear(today);
       let len = 12
-      if (this.locale.id=="fa"){
+      if (this.locale.id == "fa") {
         len = 15
       }
-      let _monthes =  Array.from({ length: len }).map((_, i) => {
+      let _monthes = Array.from({ length: len }).map((_, i) => {
 
         const month = i + 1;
         const date = new Date(year, i, 1);
@@ -207,16 +183,15 @@ export default {
           month,
           year,
           id: `${year}.${pad(month, 2)}`,
-          label: format(date, 'MMMM'),
-          ariaLabel: format(date, 'MMMM yyyy'),
+          label: date.toLocaleDateString(this.locale.id , { month: 'short' }),
+          ariaLabel: date.toLocaleDateString(this.locale.id , { month: 'short' }) + " " + year,
           isActive: month === this.month && year === this.year,
           isCurrent: month === thisMonth && year === thisYear,
           isDisabled: !this.validator({ month, year }),
           click: () => this.monthClick(month, year),
         };
       });
-      //if (this.locale.id=="fa"){ drop 3 first item
-      if (this.locale.id=="fa"){
+      if (this.locale.id == "fa") {
         _monthes = _monthes.slice(3)
       }
       return _monthes
@@ -229,7 +204,7 @@ export default {
       const startYear = yearGroupIndex * _yearGroupCount;
       const endYear = startYear + _yearGroupCount;
       let _jalali = 0
-      if (this.locale.id=="fa"){
+      if (this.locale.id == "fa") {
         _jalali = 621
       }
       return Array.from({ length: endYear - startYear }).map((_, i) => {
