@@ -14,9 +14,9 @@ import { ref, watch } from 'vue';
 
 export default {
   setup() {
-    const date = ref(new Date());
+    const date = ref(null);
     watch(date, (newVal, oldVal) => {
-      console.log('date changed', newVal, oldVal);
+      console.log('date changed', newVal, oldVal,typeof newVal,typeof oldVal);
     });
     /// log all component registered in the app
 

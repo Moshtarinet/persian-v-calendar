@@ -13960,7 +13960,10 @@ const _sfc_main = {
       }
       return { start, end };
     },
-    denormalizeValue(value, config = this.modelConfig_) {
+    denormalizeValue(value, config = [
+      "string",
+      "string"
+    ]) {
       if (this.isRange) {
         if (!this.hasValue(value))
           return null;
@@ -13969,7 +13972,11 @@ const _sfc_main = {
           end: this.$locale.denormalizeDate(value.end, config[1])
         };
       }
-      return this.$locale.denormalizeDate(value, config[0]);
+      let val = this.$locale.denormalizeDate(value, config[0]);
+      if (typeof val != "string") {
+        val = val.toISOString();
+      }
+      return val;
     },
     valuesAreEqual(a, b) {
       if (this.isRange) {

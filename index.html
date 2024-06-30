@@ -15,10 +15,10 @@
     <script type="module">
       import { createApp } from 'vue';
       import App from './src/App.vue'; // Assuming you have an App.vue for testing
-      import JalaliVCalendar from './src/index.ts'; // Importing VCalendar from index.ts
-      import JalaliVDatePicker from './src/index.ts'; // Importing VCalendar from index.ts
+      import VCalendar from './src/index.ts'; // Importing VCalendar from index.ts
+      // import JalaliVDatePicker from './src/index.ts'; // Importing VCalendar from index.ts
       const app = createApp(App);
-      app.use(JalaliVCalendar)
+      app.use(VCalendar)
 
       app.mount('#app');
     </script>
