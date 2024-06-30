@@ -8,7 +8,7 @@ const config: UserConfig = {
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'jajali-v-calendar',
+      name: 'jalali-v-calendar',
     },
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
