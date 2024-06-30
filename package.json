@@ -14,7 +14,7 @@
     "vuejs",
     "plugin",
     "calendar",
-    "v-calendar",
+    "jajali-v-calendar",
     "datepicker",
     "date picker"
   ],
@@ -24,16 +24,16 @@
     "dist",
     "types/*.d.ts"
   ],
-  "main": "dist/v-calendar.umd.js",
-  "module": "dist/v-calendar.es.js",
+  "main": "dist/jajali-v-calendar.umd.js",
+  "module": "dist/jajali-v-calendar.es.js",
   "exports": {
     ".": {
-      "import": "./dist/v-calendar.es.js",
-      "require": "./dist/v-calendar.umd.js"
+      "import": "./dist/jajali-v-calendar.es.js",
+      "require": "./dist/jajali-v-calendar.umd.js"
     },
     "./dist/style.css": "./dist/style.css"
   },
-  "unpkg": "dist/vcalendar.min.js",
+  "unpkg": "dist/jajalivcalendar.min.js",
   "types": "types/index.d.ts",
   "scripts": {
     "dev": "vite",
