@@ -8,10 +8,11 @@ import './styles/main.css';
 const install = (app: App, defaults: Defaults = {}) => {
   setVueInstance(app);
   app.use(setup, defaults);
-  const prefix = app.config.globalProperties.$VCalendar.componentPrefix;
+  let prefix = app.config.globalProperties.$VCalendar.componentPrefix;
+  prefix = prefix.toUpperCase() + prefix.slice(1);
   for (const componentKey in components) {
     const component = (components as any)[componentKey];
-    app.component(`${prefix}${component.name}`, component);
+    app.component(`Jalali${prefix}${component.name}`, component);
   }
 };
 
