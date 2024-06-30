@@ -1,4 +1,4 @@
-export { default as JalaliCalendar } from './Calendar/Calendar.vue';
-export { default as JalaliDatePicker } from './DatePicker/DatePicker.vue';
-export { default as JalaliPopover } from './Popover/Popover.vue';
-export { default as JalaliPopoverRow } from './PopoverRow/PopoverRow.vue';
+export { default as Calendar } from './Calendar/Calendar.vue';
+export { default as DatePicker } from './DatePicker/DatePicker.vue';
+export { default as Popover } from './Popover/Popover.vue';
+export { default as PopoverRow } from './PopoverRow/PopoverRow.vue';

@@ -14070,10 +14070,10 @@ const _sfc_main = {
 };
 var components = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  JalaliCalendar: _sfc_main$3,
-  JalaliDatePicker: _sfc_main,
-  JalaliPopover: _sfc_main$9,
-  JalaliPopoverRow: PopoverRow
+  Calendar: _sfc_main$3,
+  DatePicker: _sfc_main,
+  Popover: _sfc_main$9,
+  PopoverRow
 }, Symbol.toStringTag, { value: "Module" }));
 function buildMediaQuery(screens) {
   if (isString_1(screens)) {
@@ -14155,8 +14155,8 @@ const install = (app, defaults2 = {}) => {
   prefix = prefix.toUpperCase() + prefix.slice(1);
   for (const componentKey in components) {
     const component = components[componentKey];
-    app.component(`Jalali${prefix}${component.name}`, component);
+    app.component(`${prefix}${component.name}`, component);
   }
 };
 var index = { install };
-export { _sfc_main$3 as JalaliCalendar, _sfc_main as JalaliDatePicker, _sfc_main$9 as JalaliPopover, PopoverRow as JalaliPopoverRow, screensPlugin as Screens, setup as SetupCalendar, index as default };
+export { _sfc_main$3 as Calendar, _sfc_main as DatePicker, _sfc_main$9 as Popover, PopoverRow, screensPlugin as Screens, setup as SetupCalendar, index as default };

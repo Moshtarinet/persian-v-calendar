@@ -2,7 +2,7 @@
   <div>
     <h1>V-Calendar Test Page</h1>
 
-    <JalaliVDatePicker v-model="date" mode="date" locale="fa" :popover="pop" />
+    <VDatePicker v-model="date" mode="date" locale="fa" :popover="pop" />
     <hr />
     <h2>{{ date }}</h2>
     <input v-model="date" />

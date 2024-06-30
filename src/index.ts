@@ -12,7 +12,7 @@ const install = (app: App, defaults: Defaults = {}) => {
   prefix = prefix.toUpperCase() + prefix.slice(1);
   for (const componentKey in components) {
     const component = (components as any)[componentKey];
-    app.component(`Jalali${prefix}${component.name}`, component);
+    app.component(`${prefix}${component.name}`, component);
   }
 };
 
