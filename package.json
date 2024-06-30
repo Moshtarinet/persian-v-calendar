@@ -33,7 +33,7 @@
     },
     "./dist/style.css": "./dist/style.css"
   },
-  "unpkg": "dist/jajalivcalendar.min.js",
+  "unpkg": "dist/jalalivcalendar.min.js",
   "types": "types/index.d.ts",
   "scripts": {
     "dev": "vite",
