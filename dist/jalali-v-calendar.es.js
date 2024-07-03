@@ -13973,8 +13973,11 @@ const _sfc_main = {
         };
       }
       let val = this.$locale.denormalizeDate(value, config[0]);
-      if (typeof val != "string") {
-        val = val.toISOString();
+      if (typeof val != null) {
+        if (typeof val != "string") {
+          val = val.toISOString();
+        }
+        val = val.split("T")[0];
       }
       return val;
     },
